@@ -1,0 +1,42 @@
+<div class="container">
+    <div class='panel panel-primary'>
+        <div class='panel-heading'>
+            <input class='search' type='text' 
+                [(ngModel)]='searchItem' (keyup)='keystrokeListener()'
+                placeholder='Search for a book...'/>
+             <button class='btn btn-info pull-right' (click)='toggleDescription()' [disabled]='!books.length'>
+                {{ showDescription ? 'Hide' : 'Show' }} Description
+            </button>
+        </div>
+    </div>
+</div>
+ <div class='container panel-body' *ngIf='books'>
+        <div class='table-responsive'>
+            <table class='table'>
+                <thead>
+                    <th></th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let book of books'>
+                        <td>
+                            <img [src]='book.posterUrl'
+                                [style.width.px]='imageWidth'
+                                [style.margin.px]='imageMargin'/>
+                        </td>
+                        <td>
+                            <div class="post-preview">
+                                <h2 class="post-title">
+                                    {{book.title}}
+                                </h2>
+                                <h4 class="post-subtitle" *ngIf='showDescription'>
+                                    {{book.description}}
+                                </h4>
+                                <p class="post-meta">Written by <a href="#">{{book.author}}</a></p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+ </div>
