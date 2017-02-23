@@ -1,15 +1,13 @@
 const express = require('express');
 const bookRouter = express.Router();
-var booksList = [
-    { id: 0, title: "The Sun Also Rises", author: 'Earnest Hemingway'},
-    { id: 1, title: "Sula", author: 'Toni Morrison'},
-    { id: 2, title: "Harry Potter", author: 'J. K. Rowling' }
-];
+const bodyParser = require('body-parser');
 const navbarLinks = [
     {Link: '/', Text: 'Home'},
     {Link: '/about', Text: 'About'},
     {Link: '/shelf', Text: 'My Bookshelf'}
 ];
+const bookController = require('../controllers/bookController')(navbarLinks);
+bookRouter.use(bodyParser.json());
 
 bookRouter.route('/')
     .get((req, res) => {
@@ -22,14 +20,18 @@ bookRouter.route('/about')
     });
 
 bookRouter.route('/shelf/')
-    .get((req, res) => {
-        res.render('shelf', {nav: navbarLinks, books: booksList});
-    });
+    .get(bookController.getUserBooks);
 
 bookRouter.route('/shelf/:id')
-    .get((req, res) => {
-        let id = req.params.id;
-        res.render('book', {nav: navbarLinks, book: booksList[id]});
-    });
+    .get(bookController.renderBookById);
+
+bookRouter.route('/api/shelf/add')
+    .post(bookController.shelveBook);
+
+bookRouter.route('/api/library/createBook')
+    .post(bookController.createBook);
+
+bookRouter.route('/api/library/books/:id')
+    .get(bookController.getBookById);
 
 module.exports = bookRouter;

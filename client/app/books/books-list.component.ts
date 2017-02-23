@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GoogleBooksServiceComponent } from '../services/googlebooks.service';
+import { LibraryServiceComponent } from '../services/library.service';
 import { Book } from './book';
 
 @Component({
@@ -28,7 +29,8 @@ export class BooksListComponent {
     timeout = null;
     showDescription: boolean = false;
 
-    constructor(private googleBooksService: GoogleBooksServiceComponent) {}
+    constructor(private googleBooksService: GoogleBooksServiceComponent,
+                private libraryService: LibraryServiceComponent) {}
 
     keystrokeListener() {
         if (this.timeout) { clearTimeout(this.timeout); }
@@ -58,5 +60,22 @@ export class BooksListComponent {
 
     toggleDescription() {
         this.showDescription = !this.showDescription;
+    }
+
+    createBook(event, book) {
+        this.libraryService.checkBook(book.id).subscribe(lookup => {
+            if (lookup === "") {
+                this.libraryService.createBook(book).subscribe(create => {
+                    this.addToShelf(event, book);
+                });
+            } else {
+                this.addToShelf(event, book);
+            }
+        });
+    }
+
+    addToShelf(event, book) {
+        this.libraryService.addBookToShelf(book.id).subscribe(shelve => {
+        });
     }
 }

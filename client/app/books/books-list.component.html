@@ -33,6 +33,7 @@
                                     {{book.description}}
                                 </h4>
                                 <p class="post-meta">Written by <a href="#">{{book.author}}</a></p>
+                                <button class='btn btn-info' (click)='createBook($event, book);'>Add to shelf</button>
                             </div>
                         </td>
                     </tr>

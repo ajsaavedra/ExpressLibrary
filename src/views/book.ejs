@@ -15,17 +15,33 @@
 </header>
 
 <!-- Shelf Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="post-preview">
-                <h2 class="post-title">
-                    <%=book.title%>
-                </h2>
-                <p class="post-meta">Written by <a href="#"><%=book.author%></a></p>
-            </div>
-        </div>
+ <div class='container'>
+    <div class='table-responsive'>
+        <table class='table'>
+            <tbody>
+                <tr>
+                    <td>
+                        <img src="<%=book.poster_url%>" style="width:150px;">
+                    </td>
+                    <td>
+                        <div class="post-preview">
+                            <h2 class="post-title">
+                                <%=book.title%> (<%= new Date(book.release_date).getFullYear() %>)
+                            </h2>
+                            <div class="post-subtitle" *ngIf='showDescription'>
+                                <%=book.description%>
+                            </div>
+                            <p></p>
+                            <p class="post-meta">Written by <%=book.author%></p>
+                            <p class="post-meta">Genre: <%=book.genre%></p>
+                            <p class="post-meta">Pages: <%=book.pages%></p>
+                            <p class="post-meta">Rating: <%=book.rating%></p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div>
+ </div>
 <hr>
 <% include ../partials/footer %>
