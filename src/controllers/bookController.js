@@ -60,13 +60,24 @@ var bookController = function (nav) {
     var renderBookById = function(req, res) {
         let id = req.params.id;
         connection.query(
-            'SELECT * FROM books where id =?', [id],
+            'SELECT * FROM books WHERE id =?', [id],
             function(err, rows) {
                 if (!err) {
-                    res.render('book', {
-                        nav: nav,
-                        book: rows[0]
-                    });
+                    var book = rows[0];
+                    connection.query(
+                        'SELECT users.username, comments.user_comment FROM users ' +
+                        'JOIN comments ON comments.user_id = users.id WHERE comments.book_id=?', [id],
+                        function(err, rows) {
+                            if (!err) {
+                                res.render('book', {
+                                    nav: nav,
+                                    book: book,
+                                    comments: rows
+                                });
+                            } else {
+                                res.send({"Error": "Could not get details"});
+                            }
+                        });
                 } else {
                     res.send({"Error": "Could not get book"});
                 }
@@ -77,7 +88,7 @@ var bookController = function (nav) {
     var getBookById = function(req, res) {
         let id = req.params.id;
         connection.query(
-            'SELECT * FROM books where id =?', [id],
+            'SELECT * FROM books WHERE id =?', [id],
             function(err, rows) {
                 if (!err) {
                     res.send(JSON.stringify(rows[0]));
